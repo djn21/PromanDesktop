@@ -1,7 +1,8 @@
 ﻿<Window x:Class="ProjectManager.Login"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login" Height="261.654" Width="357.519" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Login" Height="261.654" Width="357.519" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        >
     <Grid Background="#FF6666FF">
         <Label Content="Please fill out the following fields to login:" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Foreground="White"/>
         <Label Content="Username" HorizontalAlignment="Left" Margin="43,60,0,0" VerticalAlignment="Top" FontSize="14" Width="85" HorizontalContentAlignment="Right" Foreground="White" FontWeight="Bold"/>
@@ -38,7 +39,8 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="134,102,0,0" VerticalAlignment="Top" Width="163" Height="30" ToolTip="Fill out password" FontSize="14" TabIndex="2" VerticalContentAlignment="Center"/>
+        <PasswordBox x:Name="txtPassword" HorizontalAlignment="Left" Margin="134,102,0,0" VerticalAlignment="Top" Width="163" Height="30" ToolTip="Fill out password" FontSize="14" TabIndex="2" VerticalContentAlignment="Center" KeyUp="txtPassword_KeyUp"/>
+        <Label x:Name="lblIncorect" Content="" HorizontalAlignment="Left" Margin="128,132,0,0" VerticalAlignment="Top" Height="31" Width="190" IsEnabled="False" Foreground="#FFD42626"/>
 
     </Grid>
 </Window>

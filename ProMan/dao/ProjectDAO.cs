@@ -13,7 +13,7 @@ namespace ProjectManager.dao
     {
 
         public static Project[] getAllProjects(){
-            XElement response=WebService.callFunction("getAllProjects");
+            XElement response=WebService.callFunction("getAllProjects", Login.username, Login.password);
             Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
                 .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
                 .ToDictionary(x => x.Key, y => y.ToList());

@@ -14,7 +14,7 @@ namespace ProjectManager.dao
 
         public static Activity[] getAllActivities()
         {
-            XElement response = WebService.callFunction("getAllActivities");
+            XElement response = WebService.callFunction("getAllActivities", Login.username, Login.password);
             Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
                 .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
                 .ToDictionary(x => x.Key, y => y.ToList());
@@ -35,7 +35,7 @@ namespace ProjectManager.dao
 
         public static Activity[] getAllActivitiesOnTask(int taskId)
         {
-            XElement response = WebService.callFunction("getAllActivitiesOnTask",taskId);
+            XElement response = WebService.callFunction("getAllActivitiesOnTask", Login.username, Login.password ,taskId);
             Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
                 .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
                 .ToDictionary(x => x.Key, y => y.ToList());

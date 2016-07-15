@@ -14,7 +14,7 @@ namespace ProjectManager.dao
 
         public static Income[] getAllIncomesOnProject(int projectId)
         {
-            XElement response = WebService.callFunction("getAllIncomesOnProject",projectId);
+            XElement response = WebService.callFunction("getAllIncomesOnProject", Login.username, Login.password, projectId);
             Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
                 .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
                 .ToDictionary(x => x.Key, y => y.ToList());

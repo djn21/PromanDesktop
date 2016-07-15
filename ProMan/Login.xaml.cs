@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectManager.dao;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,9 @@ namespace ProjectManager
     /// </summary>
     public partial class Login : Window
     {
+        public static string username="";
+        public static string password="";
+
         public Login()
         {
             InitializeComponent();
@@ -26,8 +30,37 @@ namespace ProjectManager
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            new MainWindow().Show();
-            this.Close();
+            username = txtUsername.Text;
+            password = txtPassword.Password;
+            bool response=(bool)WebService.callFunction("login", username, password);
+            if (response)
+            {
+                new MainWindow().Show();
+                this.Close();
+            }
+            else
+            {
+                lblIncorect.Content = "Incorrect username or password.";
+            }
+        }
+
+        private void txtPassword_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                username = txtUsername.Text;
+                password = txtPassword.Password;
+                bool response = (bool)WebService.callFunction("login", username, password);
+                if (response)
+                {  
+                    new MainWindow().Show();
+                    this.Close();
+                }
+                else
+                {
+                    lblIncorect.Content = "Incorrect username or password.";
+                }
+            }
         }
     }
 }

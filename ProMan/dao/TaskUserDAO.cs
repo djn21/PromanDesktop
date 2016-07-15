@@ -14,7 +14,7 @@ namespace ProjectManager.dao
 
         public static TaskUser[] getAllUsersOnTask(int taskId)
         {
-            XElement response = WebService.callFunction("getAllUsersOnTask", taskId);
+            XElement response = WebService.callFunction("getAllUsersOnTask", Login.username, Login.password, taskId);
             Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
                 .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
                 .ToDictionary(x => x.Key, y => y.ToList());

@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace ProjectManager
 {
@@ -31,13 +32,16 @@ namespace ProjectManager
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            
+            new Login().Show();
+            this.Close();
         }
 
         private void dgvProjects_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            //load projects
             Project currentProject=(Project)dgvProjects.SelectedItem;
             lblProjectName.Content =currentProject.Name;
+            //load tasks
             dto.Task[] tasks = TaskDAO.getAllTasksOnProject(currentProject.Id);
             dgvTasks.ItemsSource = tasks;
             lblProjectStartDate.Content = currentProject.StartDate.ToString();
@@ -46,6 +50,25 @@ namespace ProjectManager
             lblProjectStatus.Content = currentProject.Status;
             lblProjectNote.Content = currentProject.Note;
             dgvTasks.SelectedIndex = 0;
+            //load project users
+            ProjectUser[] projectUsers = ProjectUserDAO.getAllUsersOnProject(currentProject.Id);
+            dgvUsersOnProject.ItemsSource = projectUsers;
+            //load project incomes
+            Income[] incomes = IncomeDAO.getAllIncomesOnProject(currentProject.Id);
+            double amount = 0;
+            foreach (Income income in incomes)
+            {
+                amount += income.Amount;
+            }
+            lblProjectIncomes.Content = amount.ToString() + " KM";
+            //load project expences
+            Expence[] expences = ExpenceDAO.getAllIncomesOnProject(currentProject.Id);
+            amount = 0;
+            foreach (Expence expence in expences)
+            {
+                amount += expence.Amount;
+            }
+            lblProjectExpences.Content = amount.ToString() + " KM";
         }
 
         private void btnTaskDetails_Click(object sender, RoutedEventArgs e)
@@ -63,6 +86,9 @@ namespace ProjectManager
             //load users on task
             TaskUser[] users = TaskUserDAO.getAllUsersOnTask(currentTask.Id);
             dgvUsersOnTask.ItemsSource = users;
+            //load activities
+            Activity[] activities = ActivityDAO.getAllActivitiesOnTask(currentTask.Id);
+            dgvActivities.ItemsSource = activities;
         }
 
         private void btnProjectDetails_Click(object sender, RoutedEventArgs e)
@@ -72,6 +98,13 @@ namespace ProjectManager
 
         private void frmProjectManager_Loaded(object sender, RoutedEventArgs e)
         {
+            //get user informations
+            XElement response = WebService.callFunction("userDetails", Login.username, Login.password);
+            Dictionary<string, List<string>> dictionary = response.Descendants("item").Elements("item")
+                .GroupBy(x => x.Element("key").Value, y => y.Element("value").Value)
+                .ToDictionary(x => x.Key, y => y.ToList());
+            lblName.Content = dictionary["name"][0];
+            lblEmail.Content = dictionary["email"][0];
             //load projects
             Project[] projects = ProjectDAO.getAllProjects();
             dgvProjects.ItemsSource = projects;
